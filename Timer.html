@@ -24,24 +24,24 @@
 </head>
 <body>
 
-  <h1>Pomodoro Timer<hr></h1>
+  <h1><hr>Pomodoro Timer</h1>
   
   <div>
-    <label>Focus Time (minutes):</label>
-    <input type="number" id="focusInput" value="25" min="1" />
+    <label>Focus(Measured in Minutes):</label>
+    <input type="number" id="focusIn" value="25" min="1" />
   </div>
-
+<hr>
   <div>
-    <label>Break Time (minutes):</label>
+    <label>Break(Measured in Minutes):</label>
     <input type="number" id="breakInput" value="5" min="1" />
   </div>
-
+<hr>
   <div>
     <label>Sessions:</label>
     <input type="number" id="sessionsInput" value="4" min="1" />
   </div>
 
-  <button onclick="startPomodoro()">Start Pomodoro</button>
+  <button onclick="startTimer()">Start Timer</button>
 
   <div id="sessionStatus"></div>
   <div id="timer">00:00</div>
@@ -63,7 +63,7 @@
 
     function runSession(focusTime, breakTime, totalSessions) {
       if (currentSession > totalSessions) {
-        document.getElementById("sessionStatus").innerText = "All sessions completed!";
+        document.getElementById("sessionStatus").innerText = "Completed!";
         return;
       }
 
