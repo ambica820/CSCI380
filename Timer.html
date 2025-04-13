@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pomodoro Timer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      text-align: center;
+      padding: 2rem;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      font-size: 1rem;
+    }
+    timer {
+      font-size: 3rem;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Pomodoro Timer<hr></h1>
+  
+  <div>
+    <label>Focus Time (minutes):</label>
+    <input type="number" id="focusInput" value="25" min="1" />
+  </div>
+
+  <div>
+    <label>Break Time (minutes):</label>
+    <input type="number" id="breakInput" value="5" min="1" />
+  </div>
+
+  <div>
+    <label>Sessions:</label>
+    <input type="number" id="sessionsInput" value="4" min="1" />
+  </div>
+
+  <button onclick="startPomodoro()">Start Pomodoro</button>
+
+  <div id="sessionStatus"></div>
+  <div id="timer">00:00</div>
+
+  <script>
+    let interval;
+    let currentSession = 1;
+
+    function startPomodoro() {
+      clearInterval(interval);
+
+      const focusTime = parseInt(document.getElementById("focusInput").value) * 60;
+      const breakTime = parseInt(document.getElementById("breakInput").value) * 60;
+      const totalSessions = parseInt(document.getElementById("sessionsInput").value);
+
+      currentSession = 1;
+      runSession(focusTime, breakTime, totalSessions);
+    }
+
+    function runSession(focusTime, breakTime, totalSessions) {
+      if (currentSession > totalSessions) {
+        document.getElementById("sessionStatus").innerText = "All sessions completed!";
+        return;
+      }
+
+      document.getElementById("sessionStatus").innerText = `Session ${currentSession} - Focus Time`;
+      startCountdown(focusTime, () => {
+        document.getElementById("sessionStatus").innerText = `Session ${currentSession} - Break Time`;
+        startCountdown(breakTime, () => {
+          currentSession++;
+          runSession(focusTime, breakTime, totalSessions);
+        });
+      });
+    }
+
+    function startCountdown(seconds, callback) {
+      let remaining = seconds;
+      updateDisplay(remaining);
+
+      interval = setInterval(() => {
+        remaining--;
+        updateDisplay(remaining);
+
+        if (remaining <= 0) {
+          clearInterval(interval);
+          callback();
+        }
+      }, 1000);
+    }
+
+    function updateDisplay(seconds) {
+      const min = String(Math.floor(seconds / 60)).padStart(2, "0");
+      const sec = String(seconds % 60).padStart(2, "0");
+      document.getElementById("timer").innerText = `${min}:${sec}`;
+    }
+  </script>
+
+</body>
+</html>
